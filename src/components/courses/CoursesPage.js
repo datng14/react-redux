@@ -5,50 +5,15 @@ import PropTypes from "prop-types";
 import { bindActionCreators } from "redux";
 
 class CoursesPage extends React.Component {
-  // constructor(props) {
-  // super(props);
-  state = {
-    course: {
-      title: ""
-    }
-  };
-  // 2. binding in constructor, the function is only boudn once
-  // this.handleChange = this.handleChange.bind(this);
-  // }
-
-  // 3. Fix by using arrow function,
-  // arrow funcs inherit the binding context of their enclosing scope
-  // use handleChange = event => {...} instead handleChange(event) {...}
-  handleChange = event => {
-    const course = { ...this.state.course, title: event.target.value };
-    this.setState({
-      course: course
-    });
-  };
-
-  handleSubmit = event => {
-    event.preventDefault();
-    // we don't need to dispatch here since that's being handled in mapDispatchToProps
-    this.props.actions(this.state.course);
-  };
-
   render() {
     return (
-      <form onSubmit={this.handleSubmit}>
+      <>
         <h2>Course</h2>
-        <h3>Add course</h3>
-        <input
-          type="text"
-          // 1. this isn't ideal since a new function is allocated on every render
-          // onChange={this.handleChange.bind(this)}
-          onChange={this.handleChange}
-          value={this.state.course.title}
-        />
         <input type="submit" value="Save" />
         {this.props.courses.map(course => (
           <div key={course.title}>{course.title}</div>
         ))}
-      </form>
+      </>
     );
   }
 }
