@@ -1,18 +1,32 @@
 import React from "react";
 import { connect } from "react-redux";
 import * as courseActions from "../../redux/actions/courseActions";
+import * as authorActions from "../../redux/actions/authorActions";
 import PropTypes from "prop-types";
 import { bindActionCreators } from "redux";
+import CourseList from "./CourseList";
 
 class CoursesPage extends React.Component {
+  componentDidMount() {
+    const { courses, authors, actions } = this.props;
+
+    if (courses.length === 0) {
+      actions
+        .loadCourses()
+        .catch(error => alert("Loading courses Failed" + error));
+    }
+    if (authors.length === 0) {
+      actions
+        .loadAuthors()
+        .catch(error => alert("Loading authors Failed" + error));
+    }
+  }
+
   render() {
     return (
       <>
-        <h2>Course</h2>
-        <input type="submit" value="Save" />
-        {this.props.courses.map(course => (
-          <div key={course.title}>{course.title}</div>
-        ))}
+        <h2>Courses</h2>
+        <CourseList courses={this.props.courses} />
       </>
     );
   }
@@ -20,7 +34,8 @@ class CoursesPage extends React.Component {
 
 CoursesPage.propTypes = {
   actions: PropTypes.object.isRequired,
-  courses: PropTypes.array.isRequired
+  courses: PropTypes.array.isRequired,
+  authors: PropTypes.array.isRequired
 };
 
 // this func determines what state is passed to this component via props
@@ -30,7 +45,18 @@ function mapStateToProps(state) {
     // be specific, request only the data our component needs
     // if we expose an entire Redux store, then the component will rerender when
     // any data changes in Redux store
-    courses: state.courses
+    courses:
+      state.authors.length === 0
+        ? []
+        : state.courses.map(course => {
+            return {
+              ...course,
+              authorName: state.authors.find(
+                author => author.id == course.authorId
+              ).name
+            };
+          }),
+    authors: state.authors
   };
 }
 
@@ -45,7 +71,10 @@ function mapDispatchToProps(dispatch) {
     // first way:
     // createCourse: course => dispatch(courseActions.createCourse(course))
     // second way :
-    actions: bindActionCreators(courseActions, dispatch)
+    actions: {
+      loadCourses: bindActionCreators(courseActions.loadCourses, dispatch),
+      loadAuthors: bindActionCreators(authorActions.loadAuthors, dispatch)
+    }
   };
 }
 
