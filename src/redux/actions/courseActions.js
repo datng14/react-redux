@@ -1,5 +1,6 @@
 import * as actionTypes from "./actionTypes";
 import * as courseApi from "../../api/courseApi";
+import { beginApiCall } from "../actions/apiStatusActions";
 
 export function loadCoursesSuccess(courses) {
   return { type: actionTypes.LOAD_COURSES_SUCCESS, courses };
@@ -16,6 +17,7 @@ export function createCoursesSuccess(course) {
 // use middleware (thunk)
 export function loadCourses() {
   return function(dispatch) {
+    dispatch(beginApiCall());
     return courseApi
       .getCourses()
       .then(courses => {
@@ -30,6 +32,7 @@ export function loadCourses() {
 export function saveCourse(course) {
   // getState is optional, it allow us to access the Redux store data
   return function(dispatch, getState) {
+    dispatch(beginApiCall());
     return courseApi
       .saveCourse(course)
       .then(savedCourse => {
