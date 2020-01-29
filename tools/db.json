@@ -133,6 +133,14 @@
       "category": "1",
       "createdAt": 1580205014836,
       "slug": "123"
+    },
+    {
+      "id": 19,
+      "title": "New 1",
+      "authorId": 2,
+      "category": "JavaScript",
+      "createdAt": 1580307772085,
+      "slug": "new-1"
     }
   ],
   "authors": [

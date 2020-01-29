@@ -33,7 +33,7 @@ export function saveCourse(course) {
     return courseApi
       .saveCourse(course)
       .then(savedCourse => {
-        savedCourse.id
+        course.id
           ? dispatch(updateCoursesSuccess(savedCourse))
           : dispatch(createCoursesSuccess(savedCourse));
       })
