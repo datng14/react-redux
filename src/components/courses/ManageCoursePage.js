@@ -44,8 +44,27 @@ function ManageCoursePage({
     }));
   }
 
+  function formIsValid() {
+    const _errors = {};
+    const { title, authorId, category } = course;
+    if (!title) {
+      _errors.title = "Title is required!";
+    }
+    if (!authorId) {
+      _errors.authorId = "Author is required!";
+    }
+    if (!category) {
+      _errors.category = "Category is required";
+    }
+    setErrors(_errors);
+    return Object.keys(_errors).length === 0;
+  }
+
   function handleSave(event) {
     event.preventDefault();
+    if (!formIsValid()) {
+      return;
+    }
     setSaving(true);
     saveCourse(course)
       .then(() => {
